@@ -1,0 +1,25 @@
+
+\begin{lstlisting}[language=ST,caption={Setting Motor Status},label={lst:MotorStatus}]
+IF 
+    "Data_block_Motor1_Ctrl_Status".Structure_Drive_2.Sts_MC_Error 
+OR 
+NOT  
+    ("Data_block_Motor1_Ctrl_Status".Structure_Drive_2.Enable_MC_Power) 
+    THEN
+        "dbHoldingRegisters".MotorRegisters[14] := 0;
+ELSE
+    "dbHoldingRegisters".MotorRegisters[14] := 1;
+END_IF;
+
+\end{lstlisting}
+\begin{lstlisting}[language=ST,caption={Attempt at changing velocity when using the MC\_Move\_Velocity. In the end it was more efficient to use MC\_Move\_Jog instead},label={lst:Vel}]
+IF "Data_block_Motor1_Ctrl_Status".Structure_Drive_2.Sp_lr_Velocity <> #SetPoint THEN
+    // SetPoint Changed': 'Clear' execution
+    "Data_block_Motor1_Ctrl_Status".Structure_Drive_2.Execute_MC_Velocity:=FALSE;
+ELSE
+    "Data_block_Motor1_Ctrl_Status".Structure_Drive_2.Sp_lr_Velocity := #SetPoint;
+    "Data_block_Motor1_Ctrl_Status".Structure_Drive_2.Execute_MC_Velocity := TRUE;
+END_IF;
+\end{lstlisting}
+
+
